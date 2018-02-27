@@ -1,16 +1,12 @@
 /* global define */
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else if (typeof module !== "undefined" && module.exports) {
-        // CommonJS/Node module
+    if (typeof module !== "undefined" && module.exports) {
         module.exports = factory();
     } else {
-        // Browser globals
         root.divdrag = factory();
     }
 }(this, function () {
+
     function getPosition(e) {
         var left = 0, top = 0;
         while (e.offsetParent) {
@@ -26,14 +22,34 @@
 
     var divdrag = function (options) {
         var _this = this;
-        var _options = {opacityOnMove: 0.5, marginWindow: 3};
+        var _options = {
+            opacityOnMove: 0.5,
+            marginWindow: 3
+        };
+
         this.options = Object.assign({}, _options, options || {});
-        this.element = document.querySelectorAll(options.element)[0];
+        if (!this.options.element) {
+            throw new Error("A constructor should have an \"element\" option");
+        }
+
+        var elem = document.querySelectorAll(options.element);
+        if (elem && elem.length && elem[0] instanceof HTMLElement) {
+            this.element = elem[0];
+        } else {
+            throw new Error(options.element + " is not found");
+        }
+
         if (this.options.moveElement) {
-            this.moveElement = document.querySelectorAll(options.moveElement)[0];
+            var move = document.querySelectorAll(options.moveElement);
+            if (move && move.length && move[0] instanceof HTMLElement) {
+                this.moveElement = move[0];
+            } else {
+                throw new Error(options.moveElement + " is not found");
+            }
         } else {
             this.moveElement = this.element;
         }
+
 
         this.dragObject = null;
         this.mouseOffset = null;
@@ -69,8 +85,6 @@
 
         function mouseDown (event) {
             if (event.which !== 1) return false;
-            console.log(this);
-
             _this.dragObject = _this.element;
             _this.mouseOffset = getMouseOffset(_this.dragObject, event);
             _this.dragObject.style.opacity = _this.options.opacityOnMove;
@@ -90,7 +104,6 @@
         function mouseUp() {
             outOfWindow();
             _this.dragObject.style.opacity = 1;
-            _this.dragObject = null;
             _this.mouseOffset = null;
             document.onmousemove = null;
             document.onmouseup = null;
@@ -99,7 +112,7 @@
         }
 
         this.moveElement.onmousedown = mouseDown;
-
+        window.onresize = outOfWindow;
     };
     return divdrag;
 }));
