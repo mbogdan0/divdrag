@@ -19,12 +19,6 @@
         return {x: left, y: top};
     }
 
-    function storage() {
-        localStorage.setItem
-
-    }
-
-
     var divdrag = function (options) {
         var _this = this;
         var _options = {
@@ -95,7 +89,6 @@
                 top: _this.element.style.top,
                 left: _this.element.style.left
             }));
-
         }
 
         function mouseMove(e) {
