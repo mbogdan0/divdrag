@@ -15,7 +15,7 @@
         padding: 0 10px;
         top: 10px;
         left: 10px;
-        width: 200px;
+        width: 220px;
     }
     .divdrag-title {
         background: green;
@@ -25,6 +25,9 @@
     .hide {
         cursor: pointer;
 
+    }
+    .dear > .divdrag-content {
+        display: none;
     }
 </style>
 
@@ -44,7 +47,8 @@
     new divdrag({
         element: '.divdrag',
         moveElement: '.divdrag-title',
-        savePosition: true
+        savePosition: true,
+        classOnMove: 'dear'
     });
 </script>
 

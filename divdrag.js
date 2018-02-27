@@ -22,7 +22,7 @@
     var divdrag = function (options) {
         var _this = this;
         var _options = {
-            opacityOnMove: 0.5,
+            classOnMove: null,
             marginWindow: 3,
             savePosition: true
         };
@@ -102,6 +102,7 @@
 
         function mouseDown (event) {
             if (event.which !== 1) return false;
+            if (_this.options.classOnMove) _this.element.classList.add(_this.options.classOnMove);
             _this.mouseOffset = getMouseOffset(_this.element, event);
             _this.element.style.opacity = _this.options.opacityOnMove;
             document.onmousemove = mouseMove;
@@ -118,8 +119,8 @@
         }
 
         function mouseUp() {
+            if (_this.options.classOnMove) _this.element.classList.remove(_this.options.classOnMove);
             outOfWindow();
-            _this.element.style.opacity = 1;
             _this.mouseOffset = null;
             document.onmousemove = null;
             document.onmouseup = null;

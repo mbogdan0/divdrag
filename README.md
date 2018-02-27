@@ -16,7 +16,7 @@ install
 new divdrag({
     element: '.divdrag', 
     moveElement: '.divdrag-title',
-    savePosition: true
+    classOnMove: 'moving'
 });
 ```
 
