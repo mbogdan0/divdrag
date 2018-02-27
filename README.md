@@ -13,14 +13,18 @@ install
 
 
 ```javascript
-    new divdrag({element: '.divdrag', moveElement: '.divdrag-title'});
+new divdrag({
+    element: '.divdrag', 
+    moveElement: '.divdrag-title',
+    savePosition: true
+});
 ```
 
 optional
 ```javascript
-    {
-        opacityOnMove: 0.5,
-        marginWindow: 3
-    }
+{
+    opacityOnMove: 0.5,
+    marginWindow: 3
+}
 ```
 

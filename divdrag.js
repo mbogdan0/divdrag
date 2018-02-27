@@ -19,12 +19,18 @@
         return {x: left, y: top};
     }
 
+    function storage() {
+        localStorage.setItem
+
+    }
+
 
     var divdrag = function (options) {
         var _this = this;
         var _options = {
             opacityOnMove: 0.5,
-            marginWindow: 3
+            marginWindow: 3,
+            savePosition: true
         };
 
         this.options = Object.assign({}, _options, options || {});
@@ -39,6 +45,19 @@
             throw new Error(options.element + " is not found");
         }
 
+        if (this.options.savePosition) {
+            var pos = localStorage.getItem("divdrag" + this.options.element);
+            if (pos) {
+                try {
+                    pos = JSON.parse(pos);
+                    this.element.style.top = pos.top;
+                    this.element.style.left = pos.left;
+                    outOfWindow();
+                } catch(e){}
+            }
+        }
+
+
         if (this.options.moveElement) {
             var move = document.querySelectorAll(options.moveElement);
             if (move && move.length && move[0] instanceof HTMLElement) {
@@ -51,7 +70,6 @@
         }
 
 
-        this.dragObject = null;
         this.mouseOffset = null;
 
         function outOfWindow() {
@@ -61,33 +79,38 @@
                 w = window.innerWidth;
 
             if (obj.top + obj.height + margin > h) {
-                _this.dragObject.style.top = (h - obj.height - margin) + 'px';
+                _this.element.style.top = (h - obj.height - margin) + 'px';
             }
             if (obj.top < margin) {
-                _this.dragObject.style.top = (margin) + 'px';
+                _this.element.style.top = (margin) + 'px';
             }
             if (obj.left < margin) {
-                _this.dragObject.style.left = (margin) + 'px';
+                _this.element.style.left = (margin) + 'px';
             }
             if (obj.left + obj.width + margin > w) {
-                _this.dragObject.style.left = (w - obj.width - margin) + 'px';
+                _this.element.style.left = (w - obj.width - margin) + 'px';
             }
+
+            localStorage.setItem("divdrag" + _this.options.element, JSON.stringify({
+                top: _this.element.style.top,
+                left: _this.element.style.left
+            }));
+
         }
 
         function mouseMove(e) {
-            if (!(_this.dragObject && _this.mouseOffset)) return false;
+            if (!(_this.element && _this.mouseOffset)) return false;
             var x = e.pageX - _this.mouseOffset.x;
             var y = e.pageY - _this.mouseOffset.y;
-            _this.dragObject.style.top = y + 'px';
-            _this.dragObject.style.left = x + 'px';
+            _this.element.style.top = y + 'px';
+            _this.element.style.left = x + 'px';
             return false;
         }
 
         function mouseDown (event) {
             if (event.which !== 1) return false;
-            _this.dragObject = _this.element;
-            _this.mouseOffset = getMouseOffset(_this.dragObject, event);
-            _this.dragObject.style.opacity = _this.options.opacityOnMove;
+            _this.mouseOffset = getMouseOffset(_this.element, event);
+            _this.element.style.opacity = _this.options.opacityOnMove;
             document.onmousemove = mouseMove;
             document.onmouseup = mouseUp;
 
@@ -103,7 +126,7 @@
 
         function mouseUp() {
             outOfWindow();
-            _this.dragObject.style.opacity = 1;
+            _this.element.style.opacity = 1;
             _this.mouseOffset = null;
             document.onmousemove = null;
             document.onmouseup = null;
