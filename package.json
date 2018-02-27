@@ -9,6 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mbogdan0/divdrag.git"
+  },
+  "homepage": "https://github.com/mbogdan0/divdrag",
   "keywords": [],
   "author": "",
   "license": "ISC"
