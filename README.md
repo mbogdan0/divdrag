@@ -23,8 +23,10 @@ new divdrag({
 optional
 ```javascript
 {
-    opacityOnMove: 0.5,
-    marginWindow: 3
+    marginWindow: 3,
+    middle: true,
+    movable: false,
+    savePosition: true
 }
 ```
 

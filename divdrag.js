@@ -24,7 +24,9 @@
         var _options = {
             classOnMove: null,
             marginWindow: 3,
-            savePosition: true
+            savePosition: true,
+            middle: false,
+            movable: true
         };
 
         this.options = Object.assign({}, _options, options || {});
@@ -63,6 +65,16 @@
             this.moveElement = this.element;
         }
 
+        function toMiddle() {
+            var obj = _this.element.getBoundingClientRect();
+            var h = window.innerHeight,
+                w = window.innerWidth;
+            _this.element.style.top = ((h/2) - obj.height) + 'px';
+            _this.element.style.left = ((w/2) - obj.width) + 'px';
+        }
+        if (this.options.middle) {
+            toMiddle();
+        }
 
         this.mouseOffset = null;
 
@@ -128,7 +140,9 @@
             document.body.onselectstart = null;
         }
 
-        this.moveElement.onmousedown = mouseDown;
+        if (this.options.movable) {
+            this.moveElement.onmousedown = mouseDown;
+        }
         window.onresize = outOfWindow;
     };
     return divdrag;
